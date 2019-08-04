@@ -13,15 +13,15 @@ then
     mkdir -p ${DICT_DIR}
 fi
 
+export CFLAGS="$CFLAGS -g"
+export CXXFLAGS="$CXXFLAGS -g"
+
 echo "CC: $CC"
 echo "CXX: $CXX"
 echo "LIB_FUZZING_ENGINE: $LIB_FUZZING_ENGINE"
 echo "CFLAGS: $CFLAGS"
 echo "CXXFLAGS: $CXXFLAGS"
 echo "OUT: $OUT"
-
-export CFLAGS="$CFLAGS -g"
-export CXXFLAGS="$CXXFLAGS -g"
 
 export MAKEFLAGS+="-j$(nproc)"
 
@@ -37,10 +37,11 @@ apt-get -y install \
 
 # Compile and install libaspell.
 pushd $SRC/aspell
-export LIBS=-lpthread
+export LIBS="-lpthread"
 ./autogen
 ./configure \
     --enable-static \
+    --disable-shared \
     --disable-pspell-compatibility \
     --prefix=$ASPELL_PREFIX \
     --enable-pkgdatadir=$DICT_DIR \
